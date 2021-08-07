@@ -1,0 +1,17 @@
+  // useEffect(() => {
+
+  //   let f = async () => {
+  //     let querySnapshot = await firestore
+  //       .collection("posts")
+  //       .limit(5) //  kitna data chae
+  //       .orderBy("index", "asc") // "kis ke acc" , "asc/desc"
+  //       .get();
+
+  //     querySnapshot.forEach((doc) => {
+  //       console.log(doc.data());
+  //     })
+  //   }
+
+  //   f();
+
+  // }, [])

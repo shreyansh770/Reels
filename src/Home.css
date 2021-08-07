@@ -1,0 +1,139 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+}
+
+.logout-btn{
+    position: fixed;
+    bottom: 10rem;
+    right: 2rem;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    border: none;
+}
+
+.upload-btn{
+    position: fixed;
+    bottom: 4rem;
+    right: 2rem;
+    height: 4rem;
+    
+    border: none;
+}
+input[type="file"] {
+    display: none;
+}
+
+.upload-btn{
+    border: 1px solid #ccc;
+    display: inline-block;
+    cursor: pointer;
+    background: white;
+    position: fixed;
+    bottom: 4rem;
+    right: 2rem;
+    height: 4rem;
+    text-align: center
+}
+.post-container{
+      height: 100vh;
+      width: 100vw;
+      background: black;
+      overflow: scroll;
+      /* scroll snap type ka hone chae y direction me  */
+      scroll-snap-type: y mandatory;
+}
+
+.videoCard{
+    height: 100%;
+    width: 30rem;
+    color: white;
+    margin: auto;
+    position: relative;
+    /* kon sa part snap krvana hai->start mtlab top*/
+    scroll-snap-align: start;
+}
+
+.like{
+    position: absolute;
+    right: 10px;
+    bottom: 20vh;
+    font-size: 40px;
+    color: #ff7675
+}
+
+.comment{
+    position: absolute;
+    right: 10px;
+    bottom: 14vh;
+    font-size: 40px;
+    color: #7f8fa6;
+}
+
+.username{
+    position: absolute;
+    bottom: 20vh;
+    left: 20px;
+}
+
+.song{
+    position: absolute;
+    left: 12px;
+    bottom: 16vh;
+    display: flex;
+    justify-content: space-around;
+}
+
+.video{
+    height: 100%;
+    width: 100%;
+    /*crop ho jayegi*/
+    object-fit: cover;
+    
+}
+
+.comment-box{
+    border: 1px solid;
+    height: 45%;
+    width: 100%;
+    background: white;
+    position: absolute;
+    bottom: 0;
+    opacity: 0.9;
+    
+}
+
+.comment-box > button{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    border:none;
+    height: 10%;
+
+}
+
+.all-comments{
+    height: 80%;
+    width: 100%;
+    border: 1px solid red;
+    margin-top: 4.5vh;
+}
+.comment-form{
+    height: 10%;
+}
+
+.comment-form > input{
+    height: 100%;
+    width: 80%;
+    border: none;
+}
+
+.comment-form > button{
+    height: 100%;
+    width: 20%;
+    border: none;
+}
