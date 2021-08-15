@@ -1,22 +1,43 @@
-import { React, useContext } from "react";
-import { Redirect } from "react-router-dom";
+import { React, useContext, useState, useEffect } from "react";
+import { Redirect , Link} from "react-router-dom";
 import { auth, storage, firestore } from "./firebase";
-import { userContext } from "./App";
+import { AuthContext } from "./AuthProvider";
 import VideoCard from "./VideoCard";
 import "./Home.css";
 
 let Home = () => {
-  let value = useContext(userContext);
+  let value = useContext(AuthContext);
 
+  let [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    // onSnapshot -> ye ek function deta hai unsubsrcibe jisse ki hum
+    // us real time communication se unsubscribe kar skte hai
+    let unsubscribe = firestore
+      .collection("posts")
+      .onSnapshot((querySnapshot) => {
+        setPosts(
+          querySnapshot.docs.map((doc) => {
+            return { ...doc.data(), id: doc.id };
+          })
+        );
+      });
+
+    // cleanUp Function->ye component ke umounting ke time
+    // chalega
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   return (
     <div>
       {value ? (
         <>
           <div className="post-container">
-            <VideoCard />
-            <VideoCard />
-            <VideoCard />
+            {posts.map((post, index) => {
+              return <VideoCard key={index} post={post} />;
+            })}
           </div>
           <button
             className="logout-btn"
@@ -27,9 +48,21 @@ let Home = () => {
             Logout
           </button>
 
+          <Link to="/profile">
+           <button id="profile">Profile</button>
+          </Link>
+
           <label className="upload-btn">
             <input
               type="file"
+              // -> bcoz agr hum same file choose
+              // karenge to  koi change hogi he nhi
+              // to onChange chlega he nhi
+              // islea before selection hum usko
+              // null kr deete hai
+              onClick={(e) => {
+                e.target.value = null;
+              }}
               onChange={(e) => {
                 if (!e.target.files[0]) return;
 
@@ -53,14 +86,14 @@ let Home = () => {
                 //using the firebase storage object we are getting reference of a file location
                 //in our case posts/userId/fileName and uploading our file to that location
                 let upLoadTask = storage
-                  .ref(`/posts/${value.uid}/${name}`)
+                  .ref(`/posts/${value.uid}/${Date.now() + name}`)
                   .put(file);
 
                 /* ->jab thodi si file upload hoti hai
                    -> snapshot obj uploadTask dega*/
                 let f1 = (snapshot) => {
-                  console.log(snapshot.byteTransferred);
-                  console.log(snapshot.tottalBytes);
+                  // console.log(snapshot.byteTransferred);
+                  // console.log(snapshot.tottalBytes);
                 };
 
                 /*-> error-handling
@@ -72,15 +105,12 @@ let Home = () => {
                 /* file upload hone ke bad*/
                 let f3 = () => {
                   upLoadTask.snapshot.ref.getDownloadURL().then((url) => {
-
                     firestore.collection("posts").add({
                       userName: value.displayName,
                       url,
-                      likes:0,
-                      comments:[]
+                      likesArr: [],
+                      comments: [],
                     });
-
-
                   });
                 };
 
@@ -94,7 +124,7 @@ let Home = () => {
           </label>
         </>
       ) : (
-        <Redirect to="/" className="upload-btn" />
+        <Redirect to="/"/>
       )}
     </div>
   );
